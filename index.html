@@ -211,7 +211,13 @@ searchBtn.onclick = function(){
       let rapos = userData.public_repos; // Corrected variable name
       let following = userData.following;
       let ImageUserProfile = userData.avatar_url;
-      let name = userData.name;
+      
+      let name = user;
+
+      if(userData.name !== null && userData.name !== undefined){
+        name = userData.name;
+
+      }
 
       let location = 'null';
       let socialTwitter = 'null';
@@ -306,7 +312,7 @@ searchBtn.onclick = function(){
 
 
 
-      nameTxt.innerHTML = user;
+      nameTxt.innerHTML = name;
 
       userTxt.innerHTML = user;
       raposTxt.innerHTML = rapos;
