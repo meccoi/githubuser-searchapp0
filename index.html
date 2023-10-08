@@ -1,0 +1,351 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="dist/output.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="dark-theme">
+  <div class="container mx-auto">
+    <style>
+        .container {
+    max-width: 730px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+
+  .modal-social-item img{
+    color: white;
+  }
+    </style>
+    <section class="p-4 pt-9">
+
+
+        <div class="modal flex flex-col gap-6">
+          <div class="modal-header flex justify-between">
+            <h2 class="text-2xl font-bold">devfinder</h2>
+            <div class="switch flex gap-4">
+              <button id="switch">LIGHT</button>
+              <img id="switch-icon" src="assets/icon-sun.svg" alt="">
+            </div>
+          </div>
+          
+          <div class="modal-searchbar mt-3">
+            <input id="input-search" class="rounded-xl p-5 lg:pl-20 pl-16" type="text" placeholder="Search Github username...">
+            <img src="assets/icon-search.svg" alt="">
+            <button id="search" class="p-3 rounded-xl px-6 font-semibold">Search</button>
+          </div>
+
+          <div class="modal-content rounded-xl">
+            <div class="modal-main lg:p-10 p-7 lg:pb-4">
+              
+              <div class="modal-main-header lg:flex justify-between relative">
+                <div class="modal-text flex flex-col lg:flex-row lg:gap-8 gap-5">
+                    <img id="profile" class="rounded-full hidden lg:block" src="https://avatars.githubusercontent.com/u/583231?v=4" alt="">
+                  <div class="modal-username flex gap-5">
+                    <img id="profile" class="rounded-full block lg:hidden" src="https://avatars.githubusercontent.com/u/583231?v=4" alt="">
+                    <div>
+                      <h2 id="name" class="lg:text-2xl font-bold">The Octoat</h2>
+                      <a id="username" class="text-blue-500" href="">@octoat</a>
+                      <p id="bio" class="bio lg:mt-4 hidden lg:block">This profile has no bio</p>
+                      <label id="joined" class="lg:ml-0 block lg:hidden" for=""> Joined 25 Jan 2011</label>
+                    </div>
+                  </div>
+                  <p id="bio" class="bio lg:mt-4 block lg:hidden">This profile has no bio</p>
+                </div>
+                <div class="modal-joined-date">
+                  <label id="joined" class="joined hidden lg:block" for=""> Joined 25 Jan 2011</label>
+                </div>
+              </div>
+  
+  
+              <div class="modal-data lg:ml-36 mt-5">
+                <div class="modal-followers rounded-xl">
+                  <ul class="flex justify-between p-4 lg:pr-24">
+                    <li class="flex flex-col">
+                      <label class="text-xs lg:text-lg" for="">Rapos</label>
+                      <span id="rapos" class="font-bold lg:text-2xl">8</span>
+                    </li>
+                    <li class="flex flex-col">
+                      <label class="text-xs lg:text-lg" for="">Followers</label>
+                      <span id="followers" class="font-bold lg:text-2xl">3983</span>
+                    </li>
+                    <li class="flex flex-col">
+                      <label class="text-xs lg:text-lg" for="">Following</label>
+                      <span id="following" class="font-bold lg:text-2xl">9</span>
+                    </li>
+                  </ul>
+                </div>
+              
+  
+              <div class="modal-social-icons grid lg:grid-cols-2 gap-5 my-9">
+                <div class="modal-social-item flex gap-4">
+                  <img id="locationImg" src="assets/icon-location.svg" alt="">
+                  <p id="location" class="">San Francisco</p>
+                </div>
+                <div class="modal-social-item flex gap-4">
+                  <img id="twitterImg" src="assets/icon-twitter.svg" alt="">
+                  <p id="twitter" class="">Not Available</p>
+                </div>
+                <div class="modal-social-item flex gap-4">
+                  <img id="blogImg" src="assets/icon-website.svg" alt="">
+                  <a id="blog" class="hover:underline" href="">frontendm</a>
+                </div>
+                <div class="modal-social-item flex gap-4">
+                  <img id="companyImg" src="assets/icon-company.svg" alt="">
+                  <a id="company" class="hover:underline" href="">agithub</a>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+
+
+
+
+          </div>
+        </div>
+
+
+
+    </section>
+  </div>
+</body>
+</html>
+
+
+<script>
+
+let switchbtn = document.getElementById('switch');
+var body = document.getElementsByTagName("BODY")[0];
+let switchIcon = document.getElementById('switch-icon');
+
+switchbtn.onclick = function(){
+  body.classList.toggle('dark-theme');
+  if(switchbtn.textContent !== 'DARK'){
+    switchbtn.textContent = 'DARK';
+    switchIcon.src = 'assets/icon-moon.svg';
+  }else{
+    switchbtn.textContent = 'LIGHT';
+    switchIcon.src = 'assets/icon-sun.svg'
+  }
+}
+
+
+
+
+
+
+
+
+// --------------------------------------------
+
+
+
+
+const inputSearch = document.getElementById('input-search');
+const searchBtn = document.getElementById('search');
+
+inputSearch.addEventListener('keydown', function(event) {
+  if (event.keyCode === 13) { // Check if Enter key (key code 13) is pressed
+    searchBtn.click(); // Programmatically click the button
+  }
+});
+searchBtn.onclick = function(){
+  let userInput = document.getElementById('input-search').value;
+
+
+  // Use string interpolation to insert the userInput into the URLs
+  const githubUrl = `https://api.github.com/users/${userInput}`;
+  const followersUrl = `https://api.github.com/users/${userInput}/followers`;
+  const followingUrl = `https://api.github.com/users/${userInput}/following`;
+  const reposUrl = `https://api.github.com/users/${userInput}/repos`; // Corrected variable name
+
+  // Create an array of promises for the fetch requests
+  const promises = [
+    fetch(githubUrl),
+    fetch(followersUrl),
+    fetch(followingUrl), // Corrected variable name
+    fetch(reposUrl)      // Corrected variable name
+  ];
+
+  Promise.all(promises)
+    .then(responses => {
+      const [userResponse, followersResponse, followingResponse, reposResponse] = responses; // Corrected variable names
+
+      if (!userResponse.ok || !followersResponse.ok || !followingResponse.ok || !reposResponse.ok) {
+        throw new Error("Error fetching data");
+      }
+
+      // Parse the JSON data for all responses
+      return Promise.all([userResponse.json(), followersResponse.json(), followingResponse.json(), reposResponse.json()]); // Corrected variable names
+
+
+    })
+    .then(([userData, followersData, followingData, reposData]) => {
+
+      let user = 'null';
+      if (userData.login !== null && userData.login !== undefined) {
+        user = userData.login;
+      }
+
+      let bio = 'This profile has no bio';
+      if (userData.bio !== null && userData.bio !== undefined) {
+        bio = userData.bio;
+      }
+      let userInput = document.getElementById('input-search');
+      userInput.style.background = '#1e2a47';
+      const bioWithBr = bio.replace(/\r\n/g, '<br>');
+
+      console.log(bioWithBr);
+
+      let joined = userData.created_at;
+      const date = new Date(joined);
+      const options = { day: 'numeric', month: 'long', year: 'numeric' };
+      const formattedDate = "Joined " + date.toLocaleDateString('en-US', options);
+      let followers = userData.followers;
+      let rapos = userData.public_repos; // Corrected variable name
+      let following = userData.following;
+      let ImageUserProfile = userData.avatar_url;
+      let name = userData.name;
+
+      let location = 'null';
+      let socialTwitter = 'null';
+
+      let socialCompany = 'null';
+
+      let socialBlog = 'null';
+      let newUrl;
+
+      let newSocialBlog;
+
+      
+      let biography = document.getElementById('bio');
+      let nameTxt = document.getElementById('name');
+      let userTxt = document.getElementById('username');
+      let joinedTxt = document.getElementById('joined');
+      let raposTxt = document.getElementById('rapos');
+      let followersTxt = document.getElementById('followers');
+      let followingtxt = document.getElementById('following');
+
+      let locationIcon = document.getElementById('location');
+      let twitterIcon = document.getElementById('twitter');
+      let blogIcon = document.getElementById('blog');
+      let companyIcon = document.getElementById('company');
+
+      var imageLocation = document.getElementById('locationImg');
+      var imageTwitter = document.getElementById('twitterImg');
+      var imageBlog = document.getElementById('blogImg');
+      var imageCompany = document.getElementById('companyImg');
+
+      
+
+      if (userData.location !== null && userData.location !== undefined && userData.twitter_username !== null
+      ) {
+        
+        location = userData.location;
+        socialTwitter = userData.twitter_username;
+
+        locationIcon.classList.remove("null");
+        twitterIcon.classList.remove("null");
+
+        imageLocation.classList.remove("null");
+        imageTwitter.classList.remove("null");
+      }else{
+        locationIcon.classList.add("null");
+        twitterIcon.classList.add("null");
+
+        imageLocation.classList.add("null");
+        imageTwitter.classList.add("null");
+      }
+
+      if (userData.company !== null && userData.company !== undefined) {
+        socialCompany = userData.company;
+        companyIcon.classList.remove("null");
+        imageCompany.classList.remove("null");
+      }else{
+        companyIcon.classList.add("null");
+        imageCompany.classList.add("null");
+      }
+
+      if ( userData.html_url !== null && userData.html_url !== undefined) {
+        socialBlog = userData.html_url;
+        function removeHttp(url) {
+          return url.replace(/^https:\/\/(www\.)?/, '');
+        }
+        newSocialBlog = socialBlog;
+
+        newUrl = removeHttp(newSocialBlog);
+        blogIcon.classList.remove("null");
+        imageBlog.classList.remove("null");
+      }else{
+        blogIcon.classList.add("null");
+        imageBlog.classList.add("null");
+      }
+
+
+
+
+
+      console.log(`User: ${user}`);
+      console.log(`Bio: ${bio}`);
+      console.log(`Joined: ${joined}`);
+      console.log(`Followers: ${followers}`);
+      console.log(`Following: ${following}`);
+      console.log(`Repos: ${rapos}`); // Corrected variable name
+      console.log(`image_url: ${ImageUserProfile}`);
+      console.log(`name: ${name}`);
+      console.log(`location: ${location}`);
+      console.log(`company: ${socialCompany}`);
+      console.log(`twitter: ${socialTwitter}`);
+      console.log(`blog: ${newUrl}`);
+
+
+
+      nameTxt.innerHTML = user;
+
+      userTxt.innerHTML = user;
+      raposTxt.innerHTML = rapos;
+      followersTxt.innerHTML = followers;
+      followingtxt.innerHTML = following;
+      locationIcon.innerHTML = location;
+      twitterIcon.innerHTML = socialTwitter;
+      blogIcon.innerHTML = newUrl;
+      blogIcon.href = socialBlog;
+      companyIcon.innerHTML = socialCompany;
+
+
+      let profile = document.getElementById('profile');
+      document.querySelectorAll('#profile').forEach(function(prof) {
+        prof.src = ImageUserProfile;
+      });
+
+      document.querySelectorAll('#bio').forEach(function(biography) {
+        biography.innerHTML = bioWithBr;
+      });
+
+      document.querySelectorAll('#joined').forEach(function(join) {
+        join.innerHTML = formattedDate;
+      });
+
+
+    })
+    .catch(error => {
+      console.error(error); // Handle any errors that occurred during the fetch
+      let userInput = document.getElementById('input-search')
+
+      userInput.style.background = '#ff000021';
+    });
+}
+
+
+
+
+
+
+
+</script>
